@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const PopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isSubmenuVisible, setIsSubmenuVisible] = useState(false);
+  const menuRef = useRef(null); // Ref for the menu to manage focus
+  const submenuRef = useRef(null); // Ref for the submenu
+
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
   };
@@ -12,6 +15,8 @@ const PopButton = () => {
   const toggleSubmenu = () => {
     setIsSubmenuVisible((prev) => !prev);
   };
+
+
 
   return (
     <div className="sm:hidden relative">
@@ -28,11 +33,13 @@ const PopButton = () => {
 
       <div
         id="menu"
+        ref={menuRef}
         role="menu"
-        className={`X absolute top-0 left-0 transition-all duration-500 transform 
-            ${isVisible ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
+        className={`X absolute top-0 left-0 transition-all duration-500 transform ${
+          isVisible ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
         }`}
         aria-hidden={!isVisible}
+        
       >
         <ul className="pt-10 bg-white h-screen w-24">
           <li role="menuitem" tabIndex={0} className="text-center w-full">
@@ -41,6 +48,8 @@ const PopButton = () => {
           <li role="menuitem" tabIndex={0} className="text-center w-full">
             About
           </li>
+
+          {/* Dropdown for submenu */}
           <li role="menuitem" tabIndex={0} className="text-center w-full">
             <button
               onClick={toggleSubmenu}
@@ -50,15 +59,22 @@ const PopButton = () => {
             >
               More
             </button>
+
+            {/* Submenu */}
             <ul
               id="submenu"
+              ref={submenuRef}
               className={`transition-all duration-500 transform ${
-                isSubmenuVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+                isSubmenuVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
               }`}
               aria-hidden={!isSubmenuVisible}
             >
-              <li role="menuitem" tabIndex={0} className="text-center w-full">Services</li>
-              <li role="menuitem" tabIndex={0} className="text-center w-full">Contact</li>
+              <li role="menuitem" tabIndex={0} className="text-center w-full">
+                Services
+              </li>
+              <li role="menuitem" tabIndex={0} className="text-center w-full">
+                Contact
+              </li>
             </ul>
           </li>
         </ul>
@@ -66,4 +82,5 @@ const PopButton = () => {
     </div>
   );
 };
+
 export default PopButton;
